@@ -99,8 +99,38 @@
   './images/image5.jpeg'
 ];
 
-        const photoTextures = [];
-        photoFiles.forEach((f, i) => photoTextures[i] = loader.load(f));
+        const loader = new THREE.TextureLoader();
+const photoFiles = [
+  './images/image1.jpeg',
+  './images/image2.jpeg',
+  './images/image3.jpeg',
+  './images/image4.jpeg',
+  './images/image5.jpeg'
+];
+
+const photoTextures = [];
+
+photoFiles.forEach((url, i) => {
+  loader.load(
+    url,
+    (texture) => {
+      texture.encoding = THREE.sRGBEncoding;
+      texture.needsUpdate = true;
+      photoTextures[i] = texture;
+
+      // nếu mesh đã tồn tại → gán lại
+      if (photoMeshes[i]) {
+        photoMeshes[i].material.map = texture;
+        photoMeshes[i].material.needsUpdate = true;
+      }
+    },
+    undefined,
+    (err) => {
+      console.error('❌ Load ảnh lỗi:', url, err);
+    }
+  );
+});
+
 
         function createCustomTexture(type) {
             const canvas = document.createElement('canvas');
@@ -278,7 +308,11 @@
             const borderMat = new THREE.MeshBasicMaterial({ color: 0xFFD700 }); 
 
             for(let i=0; i<5; i++) {
-                const mat = new THREE.MeshBasicMaterial({ map: photoTextures[i], side: THREE.DoubleSide });
+                const mat = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  side: THREE.DoubleSide
+});
+
                 const mesh = new THREE.Mesh(geo, mat);
                 const border = new THREE.Mesh(borderGeo, borderMat);
                 border.position.z = -0.1; 
