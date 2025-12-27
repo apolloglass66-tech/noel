@@ -457,11 +457,7 @@ photoFiles.forEach((url, i) => {
             updateParticleGroup(groupRed, 'red', state, speed, handRotY, time);
             updateParticleGroup(groupGift, 'gift', state, speed, handRotY, time);
 
-            photoMeshes.forEach((mesh, i) => {
-                if(!mesh.material.map && photoTextures[i]) {
-                    mesh.material.map = photoTextures[i]; mesh.material.needsUpdate = true;
-                }
-            });
+            
 
             if (state === 'TREE') {
                 titleMesh.visible = true; starMesh.visible = true; loveMesh.visible = false;
